@@ -1,45 +1,54 @@
-name: CI-CD 
+name: CI/CD Pipeline
 
 on:
- push:
-  branches: [main]
- workflow_dispatch:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
- build:
-  runs-on: ubuntu-latest
-  steps:
-  - name: Checkout code
-    uses: actions/checkout@v4
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
-  - name: Setup Node
-    uses: actions/setup-node@v4
-    with:
-      node-version: '18'   
+      - name: Install dependencies
+        run: npm install || echo "No dependencies to install"
 
-  - name: Install dependencies
-    run: npm install || echo "No dependecies installed"
+      - name: Build application
+        run: echo "Building the application..."
 
-  - name: Deploy application
-    run: echo "deploying application"
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
- test:
-  runs-on: ubuntu-latest
-  needs: build 
-  steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
-    - name: Test application
-      run: npm test
+      - name: Run tests
+        run: npm test
 
- deploy:
-  runs-on: ubuntu-latest
-  needs: test
-  steps:
-   - name: Checkout code
-     uses: actions/checkout@v4
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-   - name: Deploying the website
-     run: echo "Deploying the applications"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Deploy the application
+        run: echo "Deploying the application to server..."
