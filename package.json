@@ -2,7 +2,7 @@
   "name":"ci-cd",
   "version":"1.0.0",
   "scripts":{
-    "test":"echo "testing the application .."",
-    "build":"echo "building the application ..""
+    "test":"echo \"testing the application \"",
+    "build":"echo \"building the application ..\""
   }
 }
